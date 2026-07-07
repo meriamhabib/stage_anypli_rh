@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class DocumentDownload extends Model
+{
+    protected $table = 'document_downloads';
+
+
+    protected $fillable = [
+        'user_id',
+        'document_id',
+        'downloaded_at',
+    ];
+
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+
+    public function document()
+    {
+        return $this->belongsTo(Document::class);
+    }
+}

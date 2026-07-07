@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,40 +9,74 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+
     protected $fillable = [
-        'name',
+        'nom',
+        'prenom',
         'email',
         'password',
+        'telephone',
+        'role',
+        'poste',
+        'date_embauche',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'date_embauche' => 'date',
             'password' => 'hashed',
         ];
+    }
+
+
+    // Un directeur publie des documents
+    public function documents()
+    {
+        return $this->hasMany(Document::class, 'created_by');
+    }
+
+
+    // Un employé possède des tâches
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'user_id');
+    }
+
+
+    // Demandes de congé envoyées par l'employé
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class, 'user_id');
+    }
+
+
+    // Demandes traitées par un directeur
+    public function treatedLeaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class, 'traite_par');
+    }
+
+
+    // Actualités publiées par un directeur
+    public function news()
+    {
+        return $this->hasMany(News::class, 'created_by');
+    }
+
+
+    // Téléchargements effectués par un utilisateur
+    public function documentDownloads()
+    {
+        return $this->hasMany(DocumentDownload::class, 'user_id');
     }
 }
