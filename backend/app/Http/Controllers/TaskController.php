@@ -2,85 +2,185 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Repositories\TaskRepository;
+
 
 class TaskController extends Controller
 {
+
+
+    protected $repository;
+
+
+
+    public function __construct(TaskRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+
+
+
     public function index()
     {
+
         return response()->json(
-            Task::with('user')->get()
+            $this->repository->getAll()
         );
+
     }
+
+
+
+
 
     public function store(Request $request)
     {
+
         $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'titre' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'priorite' => 'required|in:basse,moyenne,haute',
-            'statut' => 'required|in:a_faire,en_cours,en_pause,termine',
-            'date_echeance' => 'nullable|date',
+
+            'user_id'=>'required|exists:users,id',
+
+            'titre'=>'required|string|max:255',
+
+            'description'=>'nullable|string',
+
+            'priorite'=>'required|in:basse,moyenne,haute',
+
+            'statut'=>'required|in:a_faire,en_cours,en_pause,termine',
+
+            'date_echeance'=>'nullable|date',
+
         ]);
 
-        $task = Task::create($request->all());
 
-        return response()->json($task,201);
+
+        $task = $this->repository->create(
+            $request->all()
+        );
+
+
+
+        return response()->json([
+
+            'message'=>'Tâche créée avec succès',
+
+            'data'=>$task
+
+        ],201);
+
     }
+
+
+
+
 
     public function show($id)
     {
-        $task = Task::with('user')->find($id);
 
-        if(!$task){
+        $task = $this->repository->getById($id);
+
+
+
+        if(!$task)
+        {
             return response()->json([
+
                 'message'=>'Tâche introuvable'
+
             ],404);
         }
 
+
+
         return response()->json($task);
+
     }
+
+
+
+
 
     public function update(Request $request,$id)
     {
-        $task = Task::find($id);
 
-        if(!$task){
+
+        $request->validate([
+
+            'user_id'=>'required|exists:users,id',
+
+            'titre'=>'required|string|max:255',
+
+            'description'=>'nullable|string',
+
+            'priorite'=>'required|in:basse,moyenne,haute',
+
+            'statut'=>'required|in:a_faire,en_cours,en_pause,termine',
+
+            'date_echeance'=>'nullable|date',
+
+        ]);
+
+
+
+        $task = $this->repository->update(
+            $id,
+            $request->all()
+        );
+
+
+
+        if(!$task)
+        {
             return response()->json([
+
                 'message'=>'Tâche introuvable'
+
             ],404);
         }
 
-        $request->validate([
-            'user_id'=>'required|exists:users,id',
-            'titre'=>'required|string|max:255',
-            'description'=>'nullable|string',
-            'priorite'=>'required|in:basse,moyenne,haute',
-            'statut'=>'required|in:a_faire,en_cours,en_pause,termine',
-            'date_echeance'=>'nullable|date',
+
+
+        return response()->json([
+
+            'message'=>'Tâche modifiée',
+
+            'data'=>$task
+
         ]);
 
-        $task->update($request->all());
-
-        return response()->json($task);
     }
+
+
+
+
 
     public function destroy($id)
     {
-        $task = Task::find($id);
 
-        if(!$task){
+        $deleted = $this->repository->delete($id);
+
+
+
+        if(!$deleted)
+        {
             return response()->json([
+
                 'message'=>'Tâche introuvable'
+
             ],404);
         }
 
-        $task->delete();
+
 
         return response()->json([
+
             'message'=>'Tâche supprimée avec succès'
+
         ]);
+
     }
+
+
 }

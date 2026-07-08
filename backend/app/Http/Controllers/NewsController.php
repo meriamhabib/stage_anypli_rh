@@ -2,20 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\News;
 use Illuminate\Http\Request;
+use App\Repositories\NewsRepository;
 
 class NewsController extends Controller
 {
 
-    public function index()
+    protected $newsRepository;
+
+
+
+    public function __construct(NewsRepository $newsRepository)
     {
-        return response()->json(
-            News::with('auteur')->get()
-        );
+        $this->newsRepository = $newsRepository;
     }
 
 
+
+    /**
+     * Afficher toutes les actualités
+     */
+    public function index()
+    {
+
+        $news = $this->newsRepository->getAll();
+
+
+        return response()->json($news);
+
+    }
+
+
+
+
+    /**
+     * Créer une actualité
+     */
     public function store(Request $request)
     {
 
@@ -34,48 +56,79 @@ class NewsController extends Controller
         ]);
 
 
-        $news = News::create($request->all());
+
+        $news = $this->newsRepository->create(
+            $request->all()
+        );
+
 
 
         return response()->json([
+
             'message'=>'Actualité créée avec succès',
+
             'data'=>$news
+
         ],201);
+
     }
 
 
 
+
+
+    /**
+     * Afficher une actualité
+     */
     public function show($id)
     {
 
-        $news = News::with('auteur')->find($id);
+        $news = $this->newsRepository->getById($id);
+
 
 
         if(!$news)
         {
+
             return response()->json([
+
                 'message'=>'Actualité introuvable'
+
             ],404);
+
         }
 
 
+
         return response()->json($news);
+
     }
 
 
 
+
+
+    /**
+     * Modifier une actualité
+     */
     public function update(Request $request,$id)
     {
 
-        $news = News::find($id);
+        $news = $this->newsRepository->getById($id);
+
 
 
         if(!$news)
         {
+
             return response()->json([
+
                 'message'=>'Actualité introuvable'
+
             ],404);
+
         }
+
 
 
         $request->validate([
@@ -91,36 +144,64 @@ class NewsController extends Controller
         ]);
 
 
-        $news->update($request->all());
+
+        $news = $this->newsRepository->update(
+
+            $news,
+
+            $request->all()
+
+        );
+
 
 
         return response()->json([
+
             'message'=>'Actualité modifiée',
+
             'data'=>$news
+
         ]);
+
     }
 
 
 
+
+
+    /**
+     * Supprimer une actualité
+     */
     public function destroy($id)
     {
 
-        $news = News::find($id);
+        $news = $this->newsRepository->getById($id);
+
 
 
         if(!$news)
         {
+
             return response()->json([
+
                 'message'=>'Actualité introuvable'
+
             ],404);
+
         }
 
 
-        $news->delete();
+
+        $this->newsRepository->delete($news);
+
 
 
         return response()->json([
+
             'message'=>'Actualité supprimée'
+
         ]);
+
     }
+
 }
