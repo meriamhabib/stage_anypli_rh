@@ -2,22 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
+use App\Repositories\LeaveRequestRepository;
 
 class LeaveRequestController extends Controller
 {
 
+    protected $leaveRequestRepository;
+
+
+
+    public function __construct(LeaveRequestRepository $leaveRequestRepository)
+    {
+        $this->leaveRequestRepository = $leaveRequestRepository;
+    }
+
+
+
     public function index()
     {
-        return response()->json(
-            LeaveRequest::with(['user','directeur'])->get()
-        );
+        $leaves = $this->leaveRequestRepository->getAll();
+
+        return response()->json($leaves);
     }
+
+
 
 
     public function store(Request $request)
     {
+
         $request->validate([
 
             'user_id'=>'required|exists:users,id',
@@ -39,82 +53,119 @@ class LeaveRequestController extends Controller
         ]);
 
 
-        $leave = LeaveRequest::create($request->all());
+
+        $leave = $this->leaveRequestRepository->create(
+            $request->all()
+        );
+
 
 
         return response()->json([
+
             'message'=>'Demande de congé créée',
+
             'data'=>$leave
+
         ],201);
+
     }
+
 
 
 
     public function show($id)
     {
-        $leave = LeaveRequest::with(['user','directeur'])
-                    ->find($id);
+
+        $leave = $this->leaveRequestRepository->getById($id);
+
 
 
         if(!$leave)
         {
             return response()->json([
+
                 'message'=>'Demande introuvable'
+
             ],404);
         }
 
 
+
         return response()->json($leave);
+
     }
+
+
 
 
 
     public function update(Request $request,$id)
     {
 
-        $leave = LeaveRequest::find($id);
+        $leave = $this->leaveRequestRepository->getById($id);
+
 
 
         if(!$leave)
         {
             return response()->json([
+
                 'message'=>'Demande introuvable'
+
             ],404);
         }
 
 
-        $leave->update($request->all());
+
+        $leave = $this->leaveRequestRepository->update(
+            $leave,
+            $request->all()
+        );
+
 
 
         return response()->json([
+
             'message'=>'Demande modifiée',
+
             'data'=>$leave
+
         ]);
 
     }
+
+
 
 
 
     public function destroy($id)
     {
 
-        $leave = LeaveRequest::find($id);
+        $leave = $this->leaveRequestRepository->getById($id);
+
 
 
         if(!$leave)
         {
             return response()->json([
+
                 'message'=>'Demande introuvable'
+
             ],404);
         }
 
 
-        $leave->delete();
+
+        $this->leaveRequestRepository->delete($leave);
+
 
 
         return response()->json([
+
             'message'=>'Demande supprimée'
+
         ]);
 
     }
+
 }

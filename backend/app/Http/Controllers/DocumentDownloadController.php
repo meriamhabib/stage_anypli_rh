@@ -2,96 +2,137 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DocumentDownload;
 use Illuminate\Http\Request;
+use App\Repositories\DocumentDownloadRepository;
 
 class DocumentDownloadController extends Controller
 {
 
+    protected $documentDownloadRepository;
 
-    public function index()
+
+    public function __construct(DocumentDownloadRepository $documentDownloadRepository)
     {
-        return response()->json(
-            DocumentDownload::with(['user','document'])->get()
-        );
+        $this->documentDownloadRepository = $documentDownloadRepository;
     }
 
 
 
+    /**
+     * Afficher tous les téléchargements
+     */
+    public function index()
+    {
+        $downloads = $this->documentDownloadRepository->getAll();
+
+        return response()->json($downloads);
+    }
+
+
+
+
+    /**
+     * Enregistrer un téléchargement
+     */
     public function store(Request $request)
     {
 
         $request->validate([
 
-            'user_id'=>'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
 
-            'document_id'=>'required|exists:documents,id',
+            'document_id' => 'required|exists:documents,id',
 
         ]);
 
 
 
-        $download = DocumentDownload::create([
+        $download = $this->documentDownloadRepository->create([
 
-            'user_id'=>$request->user_id,
+            'user_id' => $request->user_id,
 
-            'document_id'=>$request->document_id,
+            'document_id' => $request->document_id,
 
         ]);
 
 
 
         return response()->json([
-            'message'=>'Téléchargement enregistré',
-            'data'=>$download
-        ],201);
+
+            'message' => 'Téléchargement enregistré',
+
+            'data' => $download
+
+        ], 201);
 
     }
 
 
 
 
+    /**
+     * Afficher un téléchargement
+     */
     public function show($id)
     {
 
-        $download = DocumentDownload::with(['user','document'])
-                    ->find($id);
+        $download = $this->documentDownloadRepository->getById($id);
+
 
 
         if(!$download)
         {
+
             return response()->json([
-                'message'=>'Téléchargement introuvable'
+
+                'message' => 'Téléchargement introuvable'
+
             ],404);
+
         }
+
 
 
         return response()->json($download);
+
     }
 
 
 
 
+    /**
+     * Supprimer un téléchargement
+     */
     public function destroy($id)
     {
 
-        $download = DocumentDownload::find($id);
+        $download = $this->documentDownloadRepository->getById($id);
+
 
 
         if(!$download)
         {
+
             return response()->json([
-                'message'=>'Téléchargement introuvable'
+
+                'message' => 'Téléchargement introuvable'
+
             ],404);
+
         }
 
 
-        $download->delete();
+
+        $this->documentDownloadRepository->delete($download);
+
 
 
         return response()->json([
-            'message'=>'Téléchargement supprimé'
+
+            'message' => 'Téléchargement supprimé'
+
         ]);
 
     }
+
 }

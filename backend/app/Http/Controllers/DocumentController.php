@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Document;
 use Illuminate\Http\Request;
+use App\Repositories\DocumentRepository;
 
 class DocumentController extends Controller
 {
+    protected $documentRepository;
+
+    /**
+     * Injection du Repository
+     */
+    public function __construct(DocumentRepository $documentRepository)
+    {
+        $this->documentRepository = $documentRepository;
+    }
+
     /**
      * Afficher tous les documents
      */
     public function index()
     {
-        $documents = Document::with('auteur')->get();
+        $documents = $this->documentRepository->getAll();
 
         return response()->json($documents);
     }
@@ -30,7 +40,7 @@ class DocumentController extends Controller
             'created_by' => 'required|exists:users,id',
         ]);
 
-        $document = Document::create([
+        $document = $this->documentRepository->create([
             'titre' => $request->titre,
             'description' => $request->description,
             'chemin_fichier' => $request->chemin_fichier,
@@ -49,7 +59,7 @@ class DocumentController extends Controller
      */
     public function show($id)
     {
-        $document = Document::with('auteur')->find($id);
+        $document = $this->documentRepository->getById($id);
 
         if (!$document) {
             return response()->json([
@@ -65,7 +75,7 @@ class DocumentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $document = Document::find($id);
+        $document = $this->documentRepository->getById($id);
 
         if (!$document) {
             return response()->json([
@@ -80,7 +90,7 @@ class DocumentController extends Controller
             'type_document' => 'required|string|max:100',
         ]);
 
-        $document->update([
+        $document = $this->documentRepository->update($document, [
             'titre' => $request->titre,
             'description' => $request->description,
             'chemin_fichier' => $request->chemin_fichier,
@@ -98,7 +108,7 @@ class DocumentController extends Controller
      */
     public function destroy($id)
     {
-        $document = Document::find($id);
+        $document = $this->documentRepository->getById($id);
 
         if (!$document) {
             return response()->json([
@@ -106,7 +116,7 @@ class DocumentController extends Controller
             ], 404);
         }
 
-        $document->delete();
+        $this->documentRepository->delete($document);
 
         return response()->json([
             'message' => 'Document supprimé avec succès.'
