@@ -42,15 +42,15 @@ class TaskController extends Controller
 
             'user_id'=>'required|exists:users,id',
 
-            'titre'=>'required|string|max:255',
+            'title'=>'required|string|max:255',
 
             'description'=>'nullable|string',
 
-            'priorite'=>'required|in:basse,moyenne,haute',
+            'priority'=>'required|in:low,medium,high',
 
-            'statut'=>'required|in:a_faire,en_cours,en_pause,termine',
+            'status'=>'required|in:to_do,in_progress,on_hold,completed',
 
-            'date_echeance'=>'nullable|date',
+            'due_date'=>'nullable|date',
 
         ]);
 
@@ -64,7 +64,7 @@ class TaskController extends Controller
 
         return response()->json([
 
-            'message'=>'Tâche créée avec succès',
+            'message'=>'Task created successfully',
 
             'data'=>$task
 
@@ -87,7 +87,7 @@ class TaskController extends Controller
         {
             return response()->json([
 
-                'message'=>'Tâche introuvable'
+                'message'=>'Task not found'
 
             ],404);
         }
@@ -110,15 +110,15 @@ class TaskController extends Controller
 
             'user_id'=>'required|exists:users,id',
 
-            'titre'=>'required|string|max:255',
+            'title'=>'required|string|max:255',
 
             'description'=>'nullable|string',
 
-            'priorite'=>'required|in:basse,moyenne,haute',
+            'priority'=>'required|in:low,medium,high',
 
-            'statut'=>'required|in:a_faire,en_cours,en_pause,termine',
+            'status'=>'required|in:to_do,in_progress,on_hold,completed',
 
-            'date_echeance'=>'nullable|date',
+            'due_date'=>'nullable|date',
 
         ]);
 
@@ -135,7 +135,7 @@ class TaskController extends Controller
         {
             return response()->json([
 
-                'message'=>'Tâche introuvable'
+                'message'=>'Task not found'
 
             ],404);
         }
@@ -144,7 +144,7 @@ class TaskController extends Controller
 
         return response()->json([
 
-            'message'=>'Tâche modifiée',
+            'message'=>'Task modified',
 
             'data'=>$task
 
@@ -167,7 +167,7 @@ class TaskController extends Controller
         {
             return response()->json([
 
-                'message'=>'Tâche introuvable'
+                'message'=>'Task not found'
 
             ],404);
         }
@@ -176,7 +176,7 @@ class TaskController extends Controller
 
         return response()->json([
 
-            'message'=>'Tâche supprimée avec succès'
+            'message'=>'Task deleted successfully'
 
         ]);
 

@@ -10,14 +10,14 @@ class LeaveRequest extends Model
 
     protected $fillable = [
         'user_id',
-        'date_debut',
-        'date_fin',
-        'motif',
-        'certificat',
-        'statut',
-        'date_demande',
-        'traite_par',
-        'commentaire',
+        'start_date',
+        'end_date',
+        'reason',
+        'medical_certificate',
+        'status',
+        'request_date',
+        'processed_by',
+        'comment',
     ];
 
     public function user()
@@ -26,8 +26,8 @@ class LeaveRequest extends Model
     }
 
 
-    public function directeur()
+    public function processedBy()
     {
-        return $this->belongsTo(User::class, 'traite_par');
+        return $this->belongsTo(User::class, 'processed_by');
     }
 }

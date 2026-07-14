@@ -16,28 +16,28 @@ return new class extends Migration
                   ->constrained('users')
                   ->cascadeOnDelete();
 
-            $table->date('date_debut');
+            $table->date('start_date');
 
-            $table->date('date_fin');
+            $table->date('end_date');
 
-            $table->text('motif');
+            $table->text('reason');
 
-            $table->string('certificat')->nullable();
+            $table->string('medical_certificate')->nullable();
 
-            $table->enum('statut', [
-                'en_attente',
-                'acceptee',
-                'rejetee'
-            ])->default('en_attente');
+            $table->enum('status', [
+                'pending',
+                'approved',
+                'rejected'
+            ])->default('pending');
 
-            $table->timestamp('date_demande')->useCurrent();
+            $table->timestamp('request_date')->useCurrent();
 
-            $table->foreignId('traite_par')
+            $table->foreignId('processed_by')
                   ->nullable()
                   ->constrained('users')
                   ->nullOnDelete();
 
-            $table->text('commentaire')->nullable();
+            $table->text('comment')->nullable();
 
             $table->timestamps();
         });

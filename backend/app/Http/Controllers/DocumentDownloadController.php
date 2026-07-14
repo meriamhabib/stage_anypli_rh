@@ -59,7 +59,7 @@ class DocumentDownloadController extends Controller
 
         return response()->json([
 
-            'message' => 'Téléchargement enregistré',
+            'message' => 'Download recorded',
 
             'data' => $download
 
@@ -85,7 +85,7 @@ class DocumentDownloadController extends Controller
 
             return response()->json([
 
-                'message' => 'Téléchargement introuvable'
+                'message' => 'Download not found'
 
             ],404);
 
@@ -115,7 +115,7 @@ class DocumentDownloadController extends Controller
 
             return response()->json([
 
-                'message' => 'Téléchargement introuvable'
+                'message' => 'Download not found'
 
             ],404);
 
@@ -129,7 +129,7 @@ class DocumentDownloadController extends Controller
 
         return response()->json([
 
-            'message' => 'Téléchargement supprimé'
+            'message' => 'Download deleted'
 
         ]);
 

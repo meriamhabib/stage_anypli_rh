@@ -8,6 +8,10 @@ use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\DocumentDownloadController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmployeeController;
+Route::get('/employees', [EmployeeController::class,'index']);
+
+Route::post('/employees', [EmployeeController::class,'store']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -23,15 +27,12 @@ Route::apiResource('document-downloads', DocumentDownloadController::class)
         'show',
         'destroy'
     ]);
-
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', [AuthController::class, 'profile']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
-
 
 }
 );

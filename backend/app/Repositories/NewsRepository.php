@@ -12,7 +12,7 @@ class NewsRepository
      */
     public function getAll()
     {
-        return News::with('auteur')->get();
+        return News::with('creator')->get();
     }
 
 
@@ -22,7 +22,7 @@ class NewsRepository
      */
     public function getById($id)
     {
-        return News::with('auteur')->find($id);
+        return News::with('creator')->find($id);
     }
 
 

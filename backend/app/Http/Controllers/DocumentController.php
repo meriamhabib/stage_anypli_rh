@@ -33,23 +33,23 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'titre' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'chemin_fichier' => 'required|string|max:255',
-            'type_document' => 'required|string|max:100',
+            'file_path' => 'required|string|max:255',
+            'document_type' => 'required|string|max:100',
             'created_by' => 'required|exists:users,id',
         ]);
 
         $document = $this->documentRepository->create([
-            'titre' => $request->titre,
+            'title' => $request->title,
             'description' => $request->description,
-            'chemin_fichier' => $request->chemin_fichier,
-            'type_document' => $request->type_document,
+            'file_path' => $request->file_path,
+            'document_type' => $request->document_type,
             'created_by' => $request->created_by,
         ]);
 
         return response()->json([
-            'message' => 'Document créé avec succès.',
+            'message' => 'Document created successfully.',
             'document' => $document
         ], 201);
     }
@@ -63,7 +63,7 @@ class DocumentController extends Controller
 
         if (!$document) {
             return response()->json([
-                'message' => 'Document introuvable.'
+                'message' => 'Document not found.'
             ], 404);
         }
 
@@ -79,26 +79,26 @@ class DocumentController extends Controller
 
         if (!$document) {
             return response()->json([
-                'message' => 'Document introuvable.'
+                'message' => 'Document not found.'
             ], 404);
         }
 
         $request->validate([
-            'titre' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'chemin_fichier' => 'required|string|max:255',
-            'type_document' => 'required|string|max:100',
+            'file_path' => 'required|string|max:255',
+            'document_type' => 'required|string|max:100',
         ]);
 
         $document = $this->documentRepository->update($document, [
-            'titre' => $request->titre,
+            'title' => $request->title,
             'description' => $request->description,
-            'chemin_fichier' => $request->chemin_fichier,
-            'type_document' => $request->type_document,
+            'file_path' => $request->file_path,
+            'document_type' => $request->document_type,
         ]);
 
         return response()->json([
-            'message' => 'Document mis à jour avec succès.',
+            'message' => 'Document updated successfully.',
             'document' => $document
         ]);
     }
@@ -112,14 +112,14 @@ class DocumentController extends Controller
 
         if (!$document) {
             return response()->json([
-                'message' => 'Document introuvable.'
+                'message' => 'Document not found.'
             ], 404);
         }
 
         $this->documentRepository->delete($document);
 
         return response()->json([
-            'message' => 'Document supprimé avec succès.'
+            'message' => 'Document deleted successfully.'
         ]);
     }
 }

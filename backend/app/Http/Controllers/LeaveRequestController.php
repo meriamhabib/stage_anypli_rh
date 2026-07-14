@@ -36,19 +36,19 @@ class LeaveRequestController extends Controller
 
             'user_id'=>'required|exists:users,id',
 
-            'date_debut'=>'required|date',
+            'start_date'=>'required|date',
 
-            'date_fin'=>'required|date|after_or_equal:date_debut',
+            'end_date'=>'required|date|after_or_equal:start_date',
 
-            'motif'=>'required|string',
+            'reason'=>'required|string',
 
-            'certificat'=>'nullable|string',
+            'medical_certificate'=>'nullable|string',
 
-            'statut'=>'nullable|in:en_attente,acceptee,rejetee',
+            'status'=>'nullable|in:pending,approved,rejected',
 
-            'traite_par'=>'nullable|exists:users,id',
+            'processed_by'=>'nullable|exists:users,id',
 
-            'commentaire'=>'nullable|string',
+            'comment'=>'nullable|string',
 
         ]);
 
@@ -62,7 +62,7 @@ class LeaveRequestController extends Controller
 
         return response()->json([
 
-            'message'=>'Demande de congé créée',
+            'message'=>'Leave request created',
 
             'data'=>$leave
 
@@ -84,7 +84,7 @@ class LeaveRequestController extends Controller
         {
             return response()->json([
 
-                'message'=>'Demande introuvable'
+                'message'=>'Leave request not found'
 
             ],404);
         }
@@ -110,7 +110,7 @@ class LeaveRequestController extends Controller
         {
             return response()->json([
 
-                'message'=>'Demande introuvable'
+                'message'=>'Leave request not found'
 
             ],404);
         }
@@ -126,7 +126,7 @@ class LeaveRequestController extends Controller
 
         return response()->json([
 
-            'message'=>'Demande modifiée',
+            'message'=>'Leave request modified',
 
             'data'=>$leave
 
@@ -149,7 +149,7 @@ class LeaveRequestController extends Controller
         {
             return response()->json([
 
-                'message'=>'Demande introuvable'
+                'message'=>'Leave request not found'
 
             ],404);
         }
@@ -162,7 +162,7 @@ class LeaveRequestController extends Controller
 
         return response()->json([
 
-            'message'=>'Demande supprimée'
+            'message'=>'Leave request deleted'
 
         ]);
 

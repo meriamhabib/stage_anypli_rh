@@ -9,15 +9,15 @@ class News extends Model
     protected $table = 'news';
 
     protected $fillable = [
-        'titre',
+        'title',
         'description',
         'image',
-        'date_publication',
+        'publication_date',
         'created_by',
     ];
 
 
-    public function auteur()
+    public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }

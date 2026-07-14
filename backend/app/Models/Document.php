@@ -3,20 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Document extends Model
 {
+    use HasFactory;
+
     protected $table = 'documents';
 
+
     protected $fillable = [
-        'titre',
+        'title',
         'description',
-        'chemin_fichier',
-        'type_document',
+        'file_path',
+        'document_type',
         'created_by',
     ];
 
-    public function auteur()
+
+    public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }

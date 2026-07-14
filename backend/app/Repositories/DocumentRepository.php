@@ -11,7 +11,7 @@ class DocumentRepository
      */
     public function getAll()
     {
-        return Document::with('auteur')->get();
+        return Document::with('creator')->get();
     }
 
     /**
@@ -19,7 +19,7 @@ class DocumentRepository
      */
     public function getById($id)
     {
-        return Document::with('auteur')->find($id);
+        return Document::with('creator')->find($id);
     }
 
     /**

@@ -12,13 +12,13 @@ return new class extends Migration
 
             $table->id();
 
-            $table->string('titre');
+            $table->string('title');
 
             $table->text('description')->nullable();
 
-            $table->string('chemin_fichier');
+            $table->string('file_path');
 
-            $table->string('type_document', 100);
+            $table->string('document_type', 100);
 
             $table->foreignId('created_by')
                   ->constrained('users')

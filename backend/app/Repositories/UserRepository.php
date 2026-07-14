@@ -61,5 +61,14 @@ class UserRepository
     {
         return $user->delete();
     }
+    public function getEmployees()
+    {
+        return User::where('role', 'employee')->get();
+    }
+    public function findEmployee($id)
+    {
+        return User::where('role', 'employee')
+                    ->findOrFail($id);
+    }
 
 }
