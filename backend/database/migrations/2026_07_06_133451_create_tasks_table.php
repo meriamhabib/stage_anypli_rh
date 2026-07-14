@@ -16,24 +16,24 @@ return new class extends Migration
                   ->constrained('users')
                   ->cascadeOnDelete();
 
-            $table->string('titre');
+            $table->string('title');
 
             $table->text('description')->nullable();
 
-            $table->enum('priorite', [
-                'basse',
-                'moyenne',
-                'haute'
-            ])->default('moyenne');
+            $table->enum('priority', [
+                'low',
+                'medium',
+                'high'
+            ])->default('medium');
 
-            $table->enum('statut', [
-                'a_faire',
-                'en_cours',
-                'en_pause',
-                'termine'
-            ])->default('a_faire');
+            $table->enum('status', [
+                'to_do',
+                'in_progress',
+                'on_hold',
+                'completed'
+            ])->default('to_do');
 
-            $table->date('date_echeance')->nullable();
+            $table->date('due_date')->nullable();
 
             $table->timestamps();
         });

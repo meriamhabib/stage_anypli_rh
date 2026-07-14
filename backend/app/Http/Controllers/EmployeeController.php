@@ -1,0 +1,224 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Repositories\UserRepository;
+
+class EmployeeController extends Controller
+{
+    protected $userRepository;
+
+
+    /**
+     * Injection du Repository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+
+
+    /**
+     * Display all employees
+     */
+    public function index()
+    {
+        $employees = $this->userRepository->getEmployees();
+
+        return response()->json($employees);
+    }
+
+
+
+    /**
+     * Create a new employee account
+     */
+    public function store(Request $request)
+    {
+
+        $request->validate([
+
+            'last_name' => 'required|string|max:100',
+
+            'first_name' => 'required|string|max:100',
+
+            'email' => 'required|email|unique:users',
+
+            'password' => 'required|string|min:6',
+
+            'phone' => 'nullable|string|max:20',
+
+            'position' => 'nullable|string|max:100',
+
+            'hire_date' => 'nullable|date',
+
+        ]);
+
+
+
+        $employee = $this->userRepository->create([
+
+            'last_name' => $request->last_name,
+
+            'first_name' => $request->first_name,
+
+            'email' => $request->email,
+
+            'password' => bcrypt($request->password),
+
+            'phone' => $request->phone,
+
+            'role' => 'employee',
+
+            'position' => $request->position,
+
+            'hire_date' => $request->hire_date,
+
+        ]);
+
+
+
+        return response()->json([
+
+            'message' => 'Employee account created successfully.',
+
+            'employee' => $employee
+
+        ], 201);
+
+    }
+
+
+
+    /**
+     * Display an employee
+     */
+    public function show($id)
+    {
+
+        $employee = $this->userRepository->findEmployee($id);
+
+
+        if (!$employee) {
+
+            return response()->json([
+
+                'message' => 'Employee not found.'
+
+            ],404);
+
+        }
+
+
+        return response()->json($employee);
+
+    }
+
+
+
+    /**
+     * Update an employee
+     */
+    public function update(Request $request, $id)
+    {
+
+        $employee = $this->userRepository->findEmployee($id);
+
+
+        if (!$employee) {
+
+            return response()->json([
+
+                'message' => 'Employee not found.'
+
+            ],404);
+
+        }
+
+
+
+        $request->validate([
+
+            'last_name' => 'sometimes|string|max:100',
+
+            'first_name' => 'sometimes|string|max:100',
+
+            'email' => 'sometimes|email',
+
+            'phone' => 'nullable|string|max:20',
+
+            'position' => 'nullable|string|max:100',
+
+            'hire_date' => 'nullable|date',
+
+        ]);
+
+
+
+        $employee = $this->userRepository->update($employee,[
+
+            'last_name' => $request->last_name,
+
+            'first_name' => $request->first_name,
+
+            'email' => $request->email,
+
+            'phone' => $request->phone,
+
+            'position' => $request->position,
+
+            'hire_date' => $request->hire_date,
+
+        ]);
+
+
+
+        return response()->json([
+
+            'message' => 'Employee updated successfully.',
+
+            'employee' => $employee
+
+        ]);
+
+    }
+
+
+
+    /**
+     * Delete an employee
+     */
+    public function destroy($id)
+    {
+
+        $employee = $this->userRepository->findEmployee($id);
+
+
+
+        if (!$employee) {
+
+            return response()->json([
+
+                'message' => 'Employee not found.'
+
+            ],404);
+
+        }
+
+
+
+        $this->userRepository->delete($employee);
+
+
+
+        return response()->json([
+
+            'message' => 'Employee deleted successfully.'
+
+        ]);
+
+    }
+
+}

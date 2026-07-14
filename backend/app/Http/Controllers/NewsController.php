@@ -43,13 +43,13 @@ class NewsController extends Controller
 
         $request->validate([
 
-            'titre'=>'required|string|max:255',
+            'title'=>'required|string|max:255',
 
             'description'=>'required|string',
 
             'image'=>'nullable|string|max:255',
 
-            'date_publication'=>'required|date',
+            'publication_date'=>'required|date',
 
             'created_by'=>'required|exists:users,id',
 
@@ -65,7 +65,7 @@ class NewsController extends Controller
 
         return response()->json([
 
-            'message'=>'Actualité créée avec succès',
+            'message'=>'News created successfully',
 
             'data'=>$news
 
@@ -92,7 +92,7 @@ class NewsController extends Controller
 
             return response()->json([
 
-                'message'=>'Actualité introuvable'
+                'message'=>'News not found'
 
             ],404);
 
@@ -123,7 +123,7 @@ class NewsController extends Controller
 
             return response()->json([
 
-                'message'=>'Actualité introuvable'
+                'message'=>'News not found'
 
             ],404);
 
@@ -133,13 +133,13 @@ class NewsController extends Controller
 
         $request->validate([
 
-            'titre'=>'required|string|max:255',
+            'title'=>'required|string|max:255',
 
             'description'=>'required|string',
 
             'image'=>'nullable|string|max:255',
 
-            'date_publication'=>'required|date',
+            'publication_date'=>'required|date',
 
         ]);
 
@@ -157,7 +157,7 @@ class NewsController extends Controller
 
         return response()->json([
 
-            'message'=>'Actualité modifiée',
+            'message'=>'News modified',
 
             'data'=>$news
 
@@ -184,7 +184,7 @@ class NewsController extends Controller
 
             return response()->json([
 
-                'message'=>'Actualité introuvable'
+                'message'=>'News not found'
 
             ],404);
 
@@ -198,7 +198,7 @@ class NewsController extends Controller
 
         return response()->json([
 
-            'message'=>'Actualité supprimée'
+            'message'=>'News deleted'
 
         ]);
 

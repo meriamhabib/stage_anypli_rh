@@ -14,7 +14,7 @@ class LeaveRequestRepository
     {
         return LeaveRequest::with([
             'user',
-            'directeur'
+            'processedBy'
         ])->get();
     }
 
@@ -27,7 +27,7 @@ class LeaveRequestRepository
     {
         return LeaveRequest::with([
             'user',
-            'directeur'
+            'processedBy'
         ])->find($id);
     }
 

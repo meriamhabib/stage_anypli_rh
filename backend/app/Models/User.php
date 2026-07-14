@@ -13,14 +13,14 @@ class User extends Authenticatable
 
 
     protected $fillable = [
-        'nom',
-        'prenom',
+        'last_name',
+        'first_name',
         'email',
         'password',
-        'telephone',
+        'phone',
         'role',
-        'poste',
-        'date_embauche',
+        'position',
+        'hire_date',
     ];
 
 
@@ -33,48 +33,48 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'date_embauche' => 'date',
+            'hire_date' => 'date',
             'password' => 'hashed',
         ];
     }
 
 
-    // Un directeur publie des documents
+    // A director publishes documents
     public function documents()
     {
         return $this->hasMany(Document::class, 'created_by');
     }
 
 
-    // Un employé possède des tâches
+    // An employee owns tasks
     public function tasks()
     {
         return $this->hasMany(Task::class, 'user_id');
     }
 
 
-    // Demandes de congé envoyées par l'employé
+    // Leave requests sent by the employee
     public function leaveRequests()
     {
         return $this->hasMany(LeaveRequest::class, 'user_id');
     }
 
 
-    // Demandes traitées par un directeur
+    // Leave requests processed by a director
     public function treatedLeaveRequests()
     {
-        return $this->hasMany(LeaveRequest::class, 'traite_par');
+        return $this->hasMany(LeaveRequest::class, 'processed_by');
     }
 
 
-    // Actualités publiées par un directeur
+    // News published by a director
     public function news()
     {
         return $this->hasMany(News::class, 'created_by');
     }
 
 
-    // Téléchargements effectués par un utilisateur
+    // Downloads made by a user
     public function documentDownloads()
     {
         return $this->hasMany(DocumentDownload::class, 'user_id');
