@@ -36,6 +36,7 @@ class EmployeeController extends Controller
 
 
 
+
     /**
      * Create a new employee account
      */
@@ -67,25 +68,25 @@ class EmployeeController extends Controller
         // Création de l'employé
         $employee = $this->userRepository->create([
 
-            'last_name' => $request->last_name,
+            $request->only([
 
-            'first_name' => $request->first_name,
+                'last_name',
 
-            'email' => $request->email,
+                'first_name',
 
             'password' => Hash::make(Str::random(40)),
             
             'reset_token' => $resetToken,
 
-            'phone' => $request->phone,
+                'phone',
 
-            'role' => 'employee',
+                'position',
 
-            'position' => $request->position,
+                'hire_date'
 
-            'hire_date' => $request->hire_date,
+            ])
 
-        ]);
+        );
 
 
 
@@ -113,7 +114,7 @@ class EmployeeController extends Controller
 
 
     /**
-     * Display an employee
+     * Display one employee
      */
     public function show($id)
     {
@@ -127,7 +128,7 @@ class EmployeeController extends Controller
 
                 'message' => 'Employee not found.'
 
-            ],404);
+            ], 404);
 
         }
 
@@ -140,7 +141,7 @@ class EmployeeController extends Controller
 
 
     /**
-     * Update an employee
+     * Update employee
      */
     public function update(Request $request, $id)
     {
@@ -154,7 +155,7 @@ class EmployeeController extends Controller
 
                 'message' => 'Employee not found.'
 
-            ],404);
+            ], 404);
 
         }
 
@@ -166,7 +167,7 @@ class EmployeeController extends Controller
 
             'first_name' => 'sometimes|string|max:100',
 
-            'email' => 'sometimes|email',
+            'email' => 'sometimes|email|unique:users,email,' . $id,
 
             'phone' => 'nullable|string|max:20',
 
@@ -178,21 +179,28 @@ class EmployeeController extends Controller
 
 
 
-        $employee = $this->userRepository->update($employee,[
 
-            'last_name' => $request->last_name,
+        $employee = $this->userRepository->update(
 
-            'first_name' => $request->first_name,
+            $employee,
 
-            'email' => $request->email,
+            $request->only([
 
-            'phone' => $request->phone,
+                'last_name',
 
-            'position' => $request->position,
+                'first_name',
 
-            'hire_date' => $request->hire_date,
+                'email',
 
-        ]);
+                'phone',
+
+                'position',
+
+                'hire_date'
+
+            ])
+
+        );
 
 
 
@@ -210,13 +218,12 @@ class EmployeeController extends Controller
 
 
     /**
-     * Delete an employee
+     * Delete employee
      */
     public function destroy($id)
     {
 
         $employee = $this->userRepository->findEmployee($id);
-
 
 
         if (!$employee) {
