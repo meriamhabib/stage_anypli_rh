@@ -1,4 +1,6 @@
-function EmployeeDashboard(){
+import { Link } from "react-router-dom";
+
+export default function EmployeeDashboard(){
 
     return (
 
@@ -8,17 +10,16 @@ function EmployeeDashboard(){
                 Espace Employé
             </h1>
 
-
             <p>
                 Bienvenue dans votre espace employé
             </p>
 
+            <Link to="/tasks">
+                Mes tâches
+            </Link>
 
         </div>
 
     );
 
 }
-
-
-export default EmployeeDashboard;
