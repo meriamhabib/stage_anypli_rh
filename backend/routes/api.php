@@ -13,98 +13,84 @@ use App\Http\Controllers\EmployeeController;
 
 
 
-/*
-|--------------------------------------------------------------------------
-| Auth
-|--------------------------------------------------------------------------
-*/
-
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 
-/*
-|--------------------------------------------------------------------------
-| Routes protégées par Token Sanctum
-|--------------------------------------------------------------------------
-*/
 
 Route::middleware('auth:sanctum')->group(function () {
 
 
-    // Profil utilisateur connecté
-    Route::get('/profile', [AuthController::class, 'profile']);
+    Route::get('/user', function (Request $request) {
+
+        return $request->user();
+
+    });
 
 
-    // Déconnexion
-    Route::post('/logout', [AuthController::class, 'logout']);
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Employees
-    |--------------------------------------------------------------------------
-    */
-
+    // Employees
     Route::get('/employees', [EmployeeController::class,'index']);
 
     Route::post('/employees', [EmployeeController::class,'store']);
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Documents
-    |--------------------------------------------------------------------------
-    */
-
+    // Documents
     Route::apiResource('documents', DocumentController::class);
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Tasks
-    |--------------------------------------------------------------------------
-    */
-
+    // Tasks
     Route::apiResource('tasks', TaskController::class);
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Leave Requests
-    |--------------------------------------------------------------------------
-    */
-
-    Route::apiResource('leave-requests', LeaveRequestController::class);
+    // Leave requests
+    Route::apiResource(
+        'leave-requests',
+        LeaveRequestController::class
+    );
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | News
-    |--------------------------------------------------------------------------
-    */
-
-    Route::apiResource('news', NewsController::class);
+    // News
+    Route::apiResource(
+        'news',
+        NewsController::class
+    );
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Document Downloads
-    |--------------------------------------------------------------------------
-    */
+    // Downloads
+    Route::apiResource(
+        'document-downloads',
+        DocumentDownloadController::class
+    )->only([
+        'index',
+        'store',
+        'show',
+        'destroy'
+    ]);
 
-    Route::apiResource('document-downloads', DocumentDownloadController::class)
-        ->only([
-            'index',
-            'store',
-            'show',
-            'destroy'
-        ]);
+
+
+    // Profile
+    Route::get(
+        '/profile',
+        [AuthController::class,'profile']
+    );
+
+
+
+    // Logout
+    Route::post(
+        '/logout',
+        [AuthController::class,'logout']
+    );
+
 
 });

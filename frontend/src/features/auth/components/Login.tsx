@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { login } from '../auth.service';
 import './Login.css';
+import { Link } from "react-router-dom";
 
 
 function Login() {
@@ -139,16 +140,15 @@ function Login() {
 
 
 
-                    <div className="forgot">
+                  <div className="forgot">
 
-                        <a href="/forgot-password">
+                    <Link to="/forgot-password">
 
-                            Mot de passe oublié ?
+                        Mot de passe oublié ?
 
-                        </a>
+                    </Link>
 
-
-                    </div>
+                 </div>
 
 
 

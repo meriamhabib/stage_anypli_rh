@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Mail\EmployeeAccountCreated;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
@@ -45,7 +49,7 @@ class EmployeeController extends Controller
 
             'first_name' => 'required|string|max:100',
 
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users',
 
             'phone' => 'nullable|string|max:20',
 
@@ -57,7 +61,12 @@ class EmployeeController extends Controller
 
 
 
-        $employee = $this->userRepository->createEmployee(
+        $resetToken = Str::random(64);
+
+
+
+        // Création de l'employé
+        $employee = $this->userRepository->create([
 
             $request->only([
 
@@ -65,7 +74,9 @@ class EmployeeController extends Controller
 
                 'first_name',
 
-                'email',
+            'password' => Hash::make(Str::random(40)),
+            
+            'reset_token' => $resetToken,
 
                 'phone',
 
@@ -79,6 +90,16 @@ class EmployeeController extends Controller
 
 
 
+        $link = env('FRONTEND_URL') . '/reset-password/' . $resetToken;
+
+        Mail::to($employee->email)
+        ->send(new EmployeeAccountCreated(
+        $employee,
+        $link
+         ));
+
+
+
         return response()->json([
 
             'message' => 'Employee account created successfully.',
@@ -88,7 +109,6 @@ class EmployeeController extends Controller
         ], 201);
 
     }
-
 
 
 
@@ -116,7 +136,6 @@ class EmployeeController extends Controller
         return response()->json($employee);
 
     }
-
 
 
 
@@ -194,7 +213,6 @@ class EmployeeController extends Controller
         ]);
 
     }
-
 
 
 
