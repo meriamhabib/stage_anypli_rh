@@ -22,6 +22,7 @@ class DocumentFactory extends Factory
             'title' => fake()->sentence(3),
             'description' => fake()->paragraph(),
             'file_path' => 'documents/'.fake()->uuid().'.pdf',
+            'original_name' => fake()->word().'.pdf',
             'document_type' => fake()->randomElement(['contract', 'payslip', 'other']),
             'created_by' => User::factory(),
         ];

@@ -27,6 +27,7 @@ class DocumentTest extends TestCase
             'title' => 'Policy',
             'description' => 'HR policy',
             'file_path' => 'docs/policy.pdf',
+            'original_name' => 'policy.pdf',
             'document_type' => 'other',
             'created_by' => $user->id,
         ]);

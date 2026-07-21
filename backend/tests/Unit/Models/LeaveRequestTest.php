@@ -40,6 +40,7 @@ class LeaveRequestTest extends TestCase
 
         $leave = LeaveRequest::create([
             'user_id' => $user->id,
+            'leave_type' => 'annual',
             'start_date' => '2024-06-01',
             'end_date' => '2024-06-10',
             'reason' => 'Holiday',
@@ -47,6 +48,7 @@ class LeaveRequestTest extends TestCase
         ]);
 
         $this->assertSame('Holiday', $leave->reason);
+        $this->assertSame('annual', $leave->leave_type);
         $this->assertSame('pending', $leave->status);
     }
 }

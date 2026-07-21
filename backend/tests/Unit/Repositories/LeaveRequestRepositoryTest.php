@@ -52,6 +52,7 @@ class LeaveRequestRepositoryTest extends TestCase
 
         $leave = $this->repository->create([
             'user_id' => $user->id,
+            'leave_type' => 'annual',
             'start_date' => '2024-06-01',
             'end_date' => '2024-06-05',
             'reason' => 'Vacation',

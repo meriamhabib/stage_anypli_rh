@@ -23,6 +23,7 @@ class LeaveRequestFactory extends Factory
 
         return [
             'user_id' => User::factory(),
+            'leave_type' => fake()->randomElement(['annual', 'sick', 'personal']),
             'start_date' => $start->format('Y-m-d'),
             'end_date' => $end->format('Y-m-d'),
             'reason' => fake()->sentence(),

@@ -1,170 +1,603 @@
-.login-page {
+/* =============================================
+   LOGIN PAGE v2 — GRH Anypli
+   Clean, light, modern — Gray + Blue palette
+   ============================================= */
 
+/* ── Root layout ─────────────────────────────── */
+.lp2-root {
+  min-height: 100vh;
+  display: flex;
+  font-family: 'Nunito', sans-serif;
+  background: #f9fafb;
+}
+
+/* ── LEFT PANEL ───────────────────────────────── */
+.lp2-left {
+  flex: 1;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 50%, #9ca3af 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 56px;
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 75% 100%, 0 100%);
+}
+
+/* Decorative blobs */
+.lp2-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.lp2-blob-1 {
+  width: 500px;
+  height: 500px;
+  background: rgba(55, 65, 81, 0.08);
+  top: -200px;
+  right: -180px;
+}
+
+.lp2-blob-2 {
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.1);
+  bottom: -100px;
+  left: -80px;
+}
+
+.lp2-blob-3 {
+  width: 160px;
+  height: 160px;
+  background: rgba(55, 65, 81, 0.06);
+  top: 55%;
+  left: 10%;
+}
+
+/* ── Left inner content ──────────────────────── */
+.lp2-left-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+/* Logo */
+.lp2-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.lp2-logo-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: transparent linear-gradient(135deg, #dc2626, #b91c1c) 0 0 no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+}
+
+.lp2-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.lp2-logo-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #374151;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.lp2-logo-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(55, 65, 81, 0.55);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Headline */
+.lp2-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.lp2-title {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  color: #1f2937;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.lp2-title-accent {
+  color: #dc2626;
+}
+
+.lp2-desc {
+  font-size: 0.95rem;
+  color: rgba(55, 65, 81, 0.72);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Features list */
+.lp2-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.lp2-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(31, 41, 55, 0.88);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.lp2-feature-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #dc2626;
+}
+
+.lp2-feature-check svg {
+  width: 11px;
+  height: 11px;
+}
+
+.lp2-feature-icon {
+  width: 30px;
+  height: 30px;
+  background: rgba(55, 65, 81, 0.08);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgba(55, 65, 81, 0.7);
+}
+
+.lp2-feature-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.lp2-feature-label {
+  flex: 1;
+}
+
+/* Back link */
+.lp2-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(55, 65, 81, 0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+  margin-top: 0.5rem;
+  width: fit-content;
+}
+
+.lp2-back-link:hover {
+  color: rgba(55, 65, 81, 0.8);
+  text-decoration: none;
+}
+
+/* ── RIGHT PANEL ──────────────────────────────── */
+.lp2-right {
+  width: 520px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 40px;
+  background: #f9fafb;
+}
+
+/* Card */
+.lp2-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px 40px 32px;
+  box-shadow:
+    0 4px 6px rgba(107, 114, 128, 0.04),
+    0 12px 32px rgba(107, 114, 128, 0.08),
+    0 2px 4px rgba(107, 114, 128, 0.04);
+  border: 1px solid rgba(107, 114, 128, 0.06);
+}
+
+/* Card header */
+.lp2-card-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.lp2-card-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(220, 38, 38, 0.08);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+.lp2-card-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.lp2-card-title {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #1f2937;
+  margin: 0 0 8px;
+  letter-spacing: -0.03em;
+}
+
+.lp2-card-subtitle {
+  font-size: 0.88rem;
+  color: #9ca3af;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Error */
+.lp2-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #dc2626;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Form */
+.lp2-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Field */
+.lp2-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.lp2-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: 0.01em;
+}
+
+/* Input wrapper */
+.lp2-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lp2-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.lp2-input-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.lp2-input {
+  width: 100%;
+  padding: 13px 16px 13px 44px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  background: #f9fafb;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.lp2-input:focus {
+  border-color: #dc2626;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+}
+
+.lp2-input:focus ~ .lp2-input-icon,
+.lp2-input-wrap:focus-within .lp2-input-icon {
+  color: #dc2626;
+}
+
+.lp2-input::placeholder {
+  color: #d1d5db;
+  font-weight: 400;
+}
+
+.lp2-input-pwd {
+  padding-right: 44px;
+}
+
+/* Eye toggle */
+.lp2-eye-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.lp2-eye-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.lp2-eye-btn:hover {
+  color: #1f2937;
+  background: #f3f4f6;
+}
+
+/* Forgot row */
+.lp2-forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -4px;
+}
+
+.lp2-forgot-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: #dc2626;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.lp2-forgot-link:hover {
+  color: #b91c1c;
+  text-decoration: underline;
+}
+
+/* Submit button */
+.lp2-submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 50px;
+  background: transparent linear-gradient(112deg, #dc2626, #b91c1c) 0 0 no-repeat padding-box;
+  color: #ffffff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28);
+}
+
+.lp2-submit:hover:not(:disabled) {
+  background: transparent linear-gradient(112deg, #ef4444, #dc2626) 0 0 no-repeat padding-box;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(220, 38, 38, 0.38);
+}
+
+.lp2-submit:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.lp2-submit-arrow {
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.lp2-submit-arrow svg {
+  width: 17px;
+  height: 17px;
+}
+
+.lp2-submit:hover:not(:disabled) .lp2-submit-arrow {
+  transform: translateX(3px);
+}
+
+/* Spinner */
+.lp2-spinner {
+  width: 17px;
+  height: 17px;
+  border: 2.5px solid rgba(255,255,255,0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: lp2spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes lp2spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Quick login section */
+.lp2-quick-login {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(200, 200, 200, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lp2-quick-login-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px 0;
+}
+
+.lp2-quick-login-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.lp2-quick-btn {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--text-h);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.lp2-quick-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12);
+}
+
+.lp2-quick-btn:active {
+  transform: translateY(0);
+}
+
+/* Footer */
+.lp2-footer {
+  text-align: center;
+  font-size: 11.5px;
+  color: #d1d5db;
+  margin-top: 24px;
+  font-weight: 500;
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 900px) {
+  .lp2-left {
+    display: none;
+  }
+
+  .lp2-right {
+    width: 100%;
+    padding: 32px 20px;
     min-height: 100vh;
+    align-items: flex-start;
+    padding-top: 60px;
+    background: #f9fafb;
+  }
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    background:#f1f5f9;
-
+  .lp2-card {
+    max-width: 100%;
+    padding: 32px 24px 28px;
+  }
 }
 
+@media (max-width: 1100px) {
+  .lp2-left {
+    padding: 48px 40px;
+  }
 
-
-.login-card {
-
-    width:400px;
-
-    background:white;
-
-    padding:40px;
-
-    border-radius:15px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
-
+  .lp2-right {
+    width: 460px;
+  }
 }
 
+/* ── Extra utilities ─────────────────────────── */
 
-
-.login-card h1 {
-
-    text-align:center;
-
-    color:#2563eb;
-
+/* Success alert (forgot password) */
+.lp2-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(34, 197, 94, 0.07);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: #16a34a;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
-
-
-.login-card p {
-
-    text-align:center;
-
-    color:#64748b;
-
-    margin-bottom:30px;
-
+/* Back link inside card (forgot password) */
+.lp2-fp-back {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-
-
-.form-group {
-
-    margin-bottom:20px;
-
+.lp2-fp-back .lp2-forgot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
-
-
-.form-group label {
-
-    display:block;
-
-    margin-bottom:8px;
-
-    font-weight:bold;
-
-}
-
-
-
-.form-group input {
-
-    width:100%;
-
-    padding:12px;
-
-    border-radius:8px;
-
-    border:1px solid #ddd;
-
-}
-
-
-
-.form-group input:focus {
-
-    border-color:#2563eb;
-
-    outline:none;
-
-}
-
-
-
-.forgot {
-
-    text-align:right;
-
-    margin-bottom:20px;
-
-}
-
-
-
-.forgot a {
-
-    color:#2563eb;
-
-    text-decoration:none;
-
-}
-
-
-
-.login-card button {
-
-    width:100%;
-
-    padding:12px;
-
-    border:none;
-
-    border-radius:8px;
-
-    background:#2563eb;
-
-    color:white;
-
-    font-size:16px;
-
-    cursor:pointer;
-
-}
-
-
-
-.login-card button:hover {
-
-    background:#1d4ed8;
-
-}
-
-
-
-.register-link {
-
-    text-align:center;
-
-    margin-top:25px;
-
-}
-
-
-.register-link button {
-
-    background:none;
-
-    color:#2563eb;
-
-    width:auto;
-
-    padding:0;
-
-    margin-left:5px;
-
-}

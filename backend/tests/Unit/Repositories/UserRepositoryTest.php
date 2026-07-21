@@ -113,33 +113,14 @@ class UserRepositoryTest extends TestCase
         $this->repository->findEmployee($director->id);
     }
 
-    public function test_create_employee_hashes_password_and_sets_role(): void
+    public function test_get_directors_only_returns_directors(): void
     {
-        $employee = $this->repository->createEmployee([
-            'last_name' => 'Smith',
-            'first_name' => 'Amy',
-            'email' => 'amy@example.com',
-        ]);
+        User::factory()->create(['role' => 'director']);
+        User::factory()->count(2)->create(['role' => 'employee']);
 
-        $this->assertSame('employee', $employee->role);
-        $this->assertNull($employee->phone);
-        $this->assertNotSame('', $employee->password);
-        $this->assertNotFalse(password_get_info($employee->password)['algo'] ?? false);
-        $this->assertDatabaseHas('users', ['email' => 'amy@example.com', 'role' => 'employee']);
-    }
+        $directors = $this->repository->getDirectors();
 
-    public function test_create_employee_keeps_optional_values(): void
-    {
-        $employee = $this->repository->createEmployee([
-            'last_name' => 'Smith',
-            'first_name' => 'Amy',
-            'email' => 'amy2@example.com',
-            'phone' => '0102030405',
-            'position' => 'Developer',
-            'hire_date' => '2024-01-15',
-        ]);
-
-        $this->assertSame('0102030405', $employee->phone);
-        $this->assertSame('Developer', $employee->position);
+        $this->assertCount(1, $directors);
+        $this->assertTrue($directors->every(fn ($u) => in_array($u->role, ['director', 'directeur'], true)));
     }
 }

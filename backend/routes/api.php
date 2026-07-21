@@ -34,13 +34,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Employees
     Route::get('/employees', [EmployeeController::class,'index']);
+    Route::get('/directors', [EmployeeController::class,'getDirectors']);
 
     Route::post('/employees', [EmployeeController::class,'store']);
 
 
 
+
     // Documents
     Route::apiResource('documents', DocumentController::class);
+
+    // Télécharger un document (stream + enregistrement du téléchargement)
+    Route::get('documents/{document}/download', [DocumentController::class, 'download']);
 
 
 

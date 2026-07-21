@@ -53,6 +53,7 @@ class DocumentRepositoryTest extends TestCase
             'title' => 'Handbook',
             'description' => 'Company handbook',
             'file_path' => 'docs/handbook.pdf',
+            'original_name' => 'handbook.pdf',
             'document_type' => 'other',
             'created_by' => $user->id,
         ]);
