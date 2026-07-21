@@ -4,42 +4,14 @@ namespace App\Repositories;
 
 use App\Models\Document;
 
-class DocumentRepository
+class DocumentRepository extends BaseRepository
 {
-    public function getAll()
-    {
-        return Document::with([
-            'creator',
-            'downloads'
-        ])
-        ->withCount('downloads')
-        ->get();
-    }
+    protected array $relations = ['creator', 'downloads'];
 
-    public function getById($id)
-    {
-        return Document::with([
-            'creator',
-            'downloads'
-        ])
-        ->withCount('downloads')
-        ->find($id);
-    }
+    protected array $withCount = ['downloads'];
 
-    public function create(array $data)
+    public function __construct(Document $document)
     {
-        return Document::create($data);
-    }
-
-    public function update(Document $document, array $data)
-    {
-        $document->update($data);
-
-        return $document;
-    }
-
-    public function delete(Document $document)
-    {
-        return $document->delete();
+        $this->model = $document;
     }
 }

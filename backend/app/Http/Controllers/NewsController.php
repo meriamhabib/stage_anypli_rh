@@ -3,205 +3,96 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Concerns\ApiResponse;
 use App\Repositories\NewsRepository;
 
 class NewsController extends Controller
 {
+    use ApiResponse;
 
     protected $newsRepository;
-
-
 
     public function __construct(NewsRepository $newsRepository)
     {
         $this->newsRepository = $newsRepository;
     }
 
-
-
     /**
      * Afficher toutes les actualités
      */
     public function index()
     {
-
-        $news = $this->newsRepository->getAll();
-
-
-        return response()->json($news);
-
+        return response()->json($this->newsRepository->getAll());
     }
-
-
-
 
     /**
      * Créer une actualité
      */
     public function store(Request $request)
     {
-
         $request->validate([
-
-            'title'=>'required|string|max:255',
-
-            'description'=>'required|string',
-
-            'image'=>'nullable|string|max:255',
-
-            'publication_date'=>'required|date',
-
-            'created_by'=>'required|exists:users,id',
-
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|string|max:255',
+            'publication_date' => 'required|date',
+            'created_by' => 'required|exists:users,id',
         ]);
 
+        $news = $this->newsRepository->create($request->all());
 
-
-        $news = $this->newsRepository->create(
-            $request->all()
-        );
-
-
-
-        return response()->json([
-
-            'message'=>'News created successfully',
-
-            'data'=>$news
-
-        ],201);
-
+        return $this->createdResponse($news, 'News created successfully');
     }
-
-
-
-
 
     /**
      * Afficher une actualité
      */
     public function show($id)
     {
-
         $news = $this->newsRepository->getById($id);
 
-
-
-        if(!$news)
-        {
-
-            return response()->json([
-
-                'message'=>'News not found'
-
-            ],404);
-
+        if (!$news) {
+            return $this->notFoundResponse('News not found');
         }
 
-
-
         return response()->json($news);
-
     }
-
-
-
-
 
     /**
      * Modifier une actualité
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-
         $news = $this->newsRepository->getById($id);
 
-
-
-        if(!$news)
-        {
-
-            return response()->json([
-
-                'message'=>'News not found'
-
-            ],404);
-
+        if (!$news) {
+            return $this->notFoundResponse('News not found');
         }
 
-
-
         $request->validate([
-
-            'title'=>'required|string|max:255',
-
-            'description'=>'required|string',
-
-            'image'=>'nullable|string|max:255',
-
-            'publication_date'=>'required|date',
-
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|string|max:255',
+            'publication_date' => 'required|date',
         ]);
 
+        $news = $this->newsRepository->update($news, $request->all());
 
-
-        $news = $this->newsRepository->update(
-
-            $news,
-
-            $request->all()
-
-        );
-
-
-
-        return response()->json([
-
-            'message'=>'News modified',
-
-            'data'=>$news
-
-        ]);
-
+        return $this->successResponse($news, 'News modified');
     }
-
-
-
-
 
     /**
      * Supprimer une actualité
      */
     public function destroy($id)
     {
-
         $news = $this->newsRepository->getById($id);
 
-
-
-        if(!$news)
-        {
-
-            return response()->json([
-
-                'message'=>'News not found'
-
-            ],404);
-
+        if (!$news) {
+            return $this->notFoundResponse('News not found');
         }
-
-
 
         $this->newsRepository->delete($news);
 
-
-
-        return response()->json([
-
-            'message'=>'News deleted'
-
-        ]);
-
+        return $this->messageResponse('News deleted');
     }
-
 }

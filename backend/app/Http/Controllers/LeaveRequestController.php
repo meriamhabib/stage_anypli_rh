@@ -3,31 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Concerns\ApiResponse;
 use App\Repositories\LeaveRequestRepository;
 
 class LeaveRequestController extends Controller
 {
+    use ApiResponse;
 
     protected $leaveRequestRepository;
-
-
 
     public function __construct(LeaveRequestRepository $leaveRequestRepository)
     {
         $this->leaveRequestRepository = $leaveRequestRepository;
     }
 
-
-
     public function index()
     {
-        $leaves = $this->leaveRequestRepository->getAll();
-
-        return response()->json($leaves);
+        return response()->json($this->leaveRequestRepository->getAll());
     }
-
-
-
 
     public function store(Request $request)
     {
@@ -57,10 +50,7 @@ class LeaveRequestController extends Controller
         $leave = $this->leaveRequestRepository->create($data);
         $leave->load(['user', 'processedBy']);
 
-        return response()->json([
-            'message' => 'Leave request created',
-            'data' => $leave
-        ], 201);
+        return $this->createdResponse($leave, 'Leave request created');
     }
 
     public function show($id)
@@ -68,9 +58,7 @@ class LeaveRequestController extends Controller
         $leave = $this->leaveRequestRepository->getById($id);
 
         if (!$leave) {
-            return response()->json([
-                'message' => 'Leave request not found'
-            ], 404);
+            return $this->notFoundResponse('Leave request not found');
         }
 
         return response()->json($leave);
@@ -81,9 +69,7 @@ class LeaveRequestController extends Controller
         $leave = $this->leaveRequestRepository->getById($id);
 
         if (!$leave) {
-            return response()->json([
-                'message' => 'Leave request not found'
-            ], 404);
+            return $this->notFoundResponse('Leave request not found');
         }
 
         $data = $request->all();
@@ -95,45 +81,19 @@ class LeaveRequestController extends Controller
         $leave = $this->leaveRequestRepository->update($leave, $data);
         $leave->load(['user', 'processedBy']);
 
-        return response()->json([
-            'message' => 'Leave request modified',
-            'data' => $leave
-        ]);
+        return $this->successResponse($leave, 'Leave request modified');
     }
-
-
-
-
-
 
     public function destroy($id)
     {
-
         $leave = $this->leaveRequestRepository->getById($id);
 
-
-
-        if(!$leave)
-        {
-            return response()->json([
-
-                'message'=>'Leave request not found'
-
-            ],404);
+        if (!$leave) {
+            return $this->notFoundResponse('Leave request not found');
         }
-
-
 
         $this->leaveRequestRepository->delete($leave);
 
-
-
-        return response()->json([
-
-            'message'=>'Leave request deleted'
-
-        ]);
-
+        return $this->messageResponse('Leave request deleted');
     }
-
 }
