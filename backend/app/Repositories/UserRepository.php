@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserRepository
 {
@@ -61,10 +63,21 @@ class UserRepository
     {
         return $user->delete();
     }
+
+
+    /**
+     * Retourner tous les employés
+     */
     public function getEmployees()
     {
         return User::where('role', 'employee')->get();
     }
+
+
+
+    /**
+     * Trouver un employé
+     */
     public function findEmployee($id)
     {
         return User::where('role', 'employee')
