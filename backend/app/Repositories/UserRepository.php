@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UserRepository extends BaseRepository
 {
@@ -51,42 +49,11 @@ class UserRepository extends BaseRepository
     }
 
 
-
     /**
-     * Créer un compte employé
+     * Retourner tous les directeurs
      */
-    public function createEmployee(array $data)
+    public function getDirectors()
     {
-
-        // Générer un mot de passe temporaire
-        $temporaryPassword = Str::random(10);
-
-
-        $employee = $this->model->create([
-
-            'last_name' => $data['last_name'],
-
-            'first_name' => $data['first_name'],
-
-            'email' => $data['email'],
-
-            'phone' => $data['phone'] ?? null,
-
-            'position' => $data['position'] ?? null,
-
-            'hire_date' => $data['hire_date'] ?? null,
-
-
-            // mot de passe crypté dans la BD
-            'password' => Hash::make($temporaryPassword),
-
-
-            // rôle employé
-            'role' => 'employee'
-
-        ]);
-
-
-        return $employee;
+        return $this->model->whereIn('role', ['director', 'directeur'])->get();
     }
 }

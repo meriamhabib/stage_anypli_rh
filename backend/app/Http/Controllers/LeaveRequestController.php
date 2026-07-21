@@ -25,17 +25,30 @@ class LeaveRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'sometimes|exists:users,id',
+            'leave_type' => 'required|in:annual,sick,personal',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string',
-            'medical_certificate' => 'nullable|string',
-            'status' => 'nullable|in:pending,approved,rejected',
+            'medical_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'processed_by' => 'nullable|exists:users,id',
-            'comment' => 'nullable|string',
         ]);
 
-        $leave = $this->leaveRequestRepository->create($request->all());
+        $data = $request->all();
+
+        if (empty($data['user_id']) && $request->user()) {
+            $data['user_id'] = $request->user()->id;
+        }
+
+        // Upload du certificat médical
+        if ($request->hasFile('medical_certificate')) {
+            $path = $request->file('medical_certificate')
+                            ->store('certificates', 'public');
+            $data['medical_certificate'] = $path;
+        }
+
+        $leave = $this->leaveRequestRepository->create($data);
+        $leave->load(['user', 'processedBy']);
 
         return $this->createdResponse($leave, 'Leave request created');
     }
@@ -59,7 +72,14 @@ class LeaveRequestController extends Controller
             return $this->notFoundResponse('Leave request not found');
         }
 
-        $leave = $this->leaveRequestRepository->update($leave, $request->all());
+        $data = $request->all();
+
+        if ($request->user() && in_array($request->user()->role, ['director', 'directeur'])) {
+            $data['processed_by'] = $request->user()->id;
+        }
+
+        $leave = $this->leaveRequestRepository->update($leave, $data);
+        $leave->load(['user', 'processedBy']);
 
         return $this->successResponse($leave, 'Leave request modified');
     }

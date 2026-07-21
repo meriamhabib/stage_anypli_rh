@@ -6,7 +6,9 @@ use App\Models\Document;
 
 class DocumentRepository extends BaseRepository
 {
-    protected array $relations = ['creator'];
+    protected array $relations = ['creator', 'downloads'];
+
+    protected array $withCount = ['downloads'];
 
     public function __construct(Document $document)
     {

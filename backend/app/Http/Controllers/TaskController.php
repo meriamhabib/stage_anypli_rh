@@ -17,15 +17,21 @@ class TaskController extends Controller
         $this->repository = $repository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $user = $request->user();
+
+        if ($user) {
+            return response()->json($this->repository->getByUserId($user->id));
+        }
+
         return response()->json($this->repository->getAll());
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'sometimes|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'required|in:low,medium,high',
@@ -33,7 +39,12 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
         ]);
 
-        $task = $this->repository->create($request->all());
+        $data = $request->all();
+        if (empty($data['user_id']) && $request->user()) {
+            $data['user_id'] = $request->user()->id;
+        }
+
+        $task = $this->repository->create($data);
 
         return $this->createdResponse($task, 'Task created successfully');
     }
@@ -52,11 +63,11 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'title' => 'required|string|max:255',
+            'user_id' => 'sometimes|exists:users,id',
+            'title' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
-            'priority' => 'required|in:low,medium,high',
-            'status' => 'required|in:to_do,in_progress,on_hold,completed',
+            'priority' => 'sometimes|in:low,medium,high',
+            'status' => 'sometimes|in:to_do,in_progress,on_hold,completed',
             'due_date' => 'nullable|date',
         ]);
 

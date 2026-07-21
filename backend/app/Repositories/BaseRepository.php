@@ -19,11 +19,18 @@ abstract class BaseRepository
     protected array $relations = [];
 
     /**
+     * Relations whose counts are appended on read operations.
+     *
+     * @var array<int, string>
+     */
+    protected array $withCount = [];
+
+    /**
      * Retrieve all records with their configured relations.
      */
     public function getAll()
     {
-        return $this->model->with($this->relations)->get();
+        return $this->query()->get();
     }
 
     /**
@@ -31,7 +38,17 @@ abstract class BaseRepository
      */
     public function getById($id)
     {
-        return $this->model->with($this->relations)->find($id);
+        return $this->query()->find($id);
+    }
+
+    /**
+     * Base read query with the configured eager-loaded relations and counts.
+     */
+    protected function query()
+    {
+        return $this->model
+            ->with($this->relations)
+            ->withCount($this->withCount);
     }
 
     /**

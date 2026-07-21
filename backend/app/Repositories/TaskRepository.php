@@ -14,6 +14,16 @@ class TaskRepository extends BaseRepository
     }
 
     /**
+     * Récupérer les tâches d'un utilisateur spécifique.
+     */
+    public function getByUserId($userId)
+    {
+        return $this->query()
+            ->where('user_id', $userId)
+            ->get();
+    }
+
+    /**
      * Update a task by id, returning null when it does not exist.
      */
     public function update($id, array $data)

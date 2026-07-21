@@ -33,6 +33,14 @@ class EmployeeController extends Controller
     }
 
     /**
+     * Display all directors
+     */
+    public function getDirectors()
+    {
+        return response()->json($this->userRepository->getDirectors());
+    }
+
+    /**
      * Create a new employee account
      */
     public function store(Request $request)
