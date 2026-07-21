@@ -36,8 +36,8 @@ function AddEmployee({ onSuccess }: AddEmployeeProps) {
             });
             onSuccess();
         } catch (error: any) {
-            console.log(error.response?.data);
-            alert("Erreur lors de l'ajout");
+            console.error(error.response?.data ?? error);
+            alert(error.response?.data?.message || "Erreur lors de l'ajout");
         }
     };
 

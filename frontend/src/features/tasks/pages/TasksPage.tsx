@@ -10,13 +10,16 @@ import AppLayout from "../../../components/layout/AppLayout";
 export default function TasksPage() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [open, setOpen] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const loadTasks = async () => {
         try {
             const response = await getTasks();
             setTasks(response.data);
+            setError(null);
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            setError("Impossible de charger les tâches. Veuillez réessayer.");
         }
     };
 
@@ -68,7 +71,7 @@ export default function TasksPage() {
             };
             await updateTask(draggedTask.id, updatedTaskData);
         } catch (error) {
-            console.log("Error updating task status:", error);
+            console.error("Error updating task status:", error);
             // Revert on failure
             loadTasks();
         }
@@ -88,6 +91,10 @@ export default function TasksPage() {
                         + Ajouter une tâche
                     </button>
                 </div>
+
+                {error && (
+                    <p style={{ color: "red" }}>{error}</p>
+                )}
 
                 {open && (
                     <TaskForm

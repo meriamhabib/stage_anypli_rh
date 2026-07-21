@@ -8,7 +8,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\ForgotPasswordMail;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -140,8 +142,19 @@ public function forgotPassword(Request $request)
 
     $link = env('FRONTEND_URL') . '/reset-password/' . $token;
 
-    Mail::to($user->email)
-        ->send(new ForgotPasswordMail($user, $link));
+    try {
+        Mail::to($user->email)
+            ->send(new ForgotPasswordMail($user, $link));
+    } catch (Throwable $e) {
+        Log::error('Failed to send password reset email', [
+            'email' => $user->email,
+            'exception' => $e,
+        ]);
+
+        return response()->json([
+            'message' => 'Unable to send the password reset email. Please try again later.'
+        ], 500);
+    }
 
     return response()->json([
         'message' => 'Password reset link sent successfully.'
