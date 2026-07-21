@@ -32,9 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-    // Employees (director only)
+    // Employees / directors (director only)
     Route::middleware('role:director')->group(function () {
         Route::get('/employees', [EmployeeController::class,'index']);
+        Route::get('/directors', [EmployeeController::class,'getDirectors']);
         Route::post('/employees', [EmployeeController::class,'store']);
     });
 
@@ -48,6 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('documents', DocumentController::class)
             ->only(['store', 'update', 'destroy']);
     });
+
+    // Télécharger un document (stream + enregistrement du téléchargement)
+    Route::get('documents/{document}/download', [DocumentController::class, 'download']);
 
 
 

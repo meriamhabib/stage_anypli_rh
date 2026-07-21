@@ -6,33 +6,31 @@ use App\Models\Document;
 
 class DocumentRepository
 {
-    /**
-     * Retourner tous les documents
-     */
     public function getAll()
     {
-        return Document::with('creator')->get();
+        return Document::with([
+            'creator',
+            'downloads'
+        ])
+        ->withCount('downloads')
+        ->get();
     }
 
-    /**
-     * Retourner un document par son id
-     */
     public function getById($id)
     {
-        return Document::with('creator')->find($id);
+        return Document::with([
+            'creator',
+            'downloads'
+        ])
+        ->withCount('downloads')
+        ->find($id);
     }
 
-    /**
-     * Créer un document
-     */
     public function create(array $data)
     {
         return Document::create($data);
     }
 
-    /**
-     * Modifier un document
-     */
     public function update(Document $document, array $data)
     {
         $document->update($data);
@@ -40,9 +38,6 @@ class DocumentRepository
         return $document;
     }
 
-    /**
-     * Supprimer un document
-     */
     public function delete(Document $document)
     {
         return $document->delete();
