@@ -25,6 +25,16 @@ class TaskRepository
                     ->get();
     }
 
+    // récupérer les tâches d'un utilisateur spécifique
+    public function getByUserId($userId)
+    {
+        return $this->model
+                    ->with('user')
+                    ->where('user_id', $userId)
+                    ->get();
+    }
+
+
 
 
     // récupérer une tâche par id

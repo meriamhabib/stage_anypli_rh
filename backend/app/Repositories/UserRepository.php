@@ -71,4 +71,9 @@ class UserRepository
                     ->findOrFail($id);
     }
 
+    public function getDirectors()
+    {
+        return User::whereIn('role', ['director', 'directeur'])->get();
+    }
+
 }
