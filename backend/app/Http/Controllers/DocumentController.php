@@ -37,7 +37,6 @@ class DocumentController extends Controller
             'description' => 'nullable|string',
             'file_path' => 'required|string|max:255',
             'document_type' => 'required|string|max:100',
-            'created_by' => 'required|exists:users,id',
         ]);
 
         $document = $this->documentRepository->create([
@@ -45,7 +44,7 @@ class DocumentController extends Controller
             'description' => $request->description,
             'file_path' => $request->file_path,
             'document_type' => $request->document_type,
-            'created_by' => $request->created_by,
+            'created_by' => $request->user()->id,
         ]);
 
         return response()->json([

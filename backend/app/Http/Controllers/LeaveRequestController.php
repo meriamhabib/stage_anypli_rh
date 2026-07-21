@@ -32,9 +32,7 @@ class LeaveRequestController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-
-            'user_id'=>'required|exists:users,id',
+        $data = $request->validate([
 
             'start_date'=>'required|date',
 
@@ -44,18 +42,17 @@ class LeaveRequestController extends Controller
 
             'medical_certificate'=>'nullable|string',
 
-            'status'=>'nullable|in:pending,approved,rejected',
-
-            'processed_by'=>'nullable|exists:users,id',
-
-            'comment'=>'nullable|string',
-
         ]);
+
+        // The owner and processing state are set server-side so an employee
+        // cannot submit a request for someone else or self-approve it.
+        $data['user_id'] = $request->user()->id;
+        $data['status'] = 'pending';
 
 
 
         $leave = $this->leaveRequestRepository->create(
-            $request->all()
+            $data
         );
 
 
@@ -117,9 +114,21 @@ class LeaveRequestController extends Controller
 
 
 
+        $data = $request->validate([
+
+            'status'=>'sometimes|in:pending,approved,rejected',
+
+            'comment'=>'nullable|string',
+
+        ]);
+
+        $data['processed_by'] = $request->user()->id;
+
+
+
         $leave = $this->leaveRequestRepository->update(
             $leave,
-            $request->all()
+            $data
         );
 
 

@@ -66,27 +66,23 @@ class EmployeeController extends Controller
 
 
         // Création de l'employé
-        $employee = $this->userRepository->create([
-
+        $employee = $this->userRepository->create(array_merge(
             $request->only([
-
                 'last_name',
-
                 'first_name',
-
-            'password' => Hash::make(Str::random(40)),
-            
-            'reset_token' => $resetToken,
-
+                'email',
                 'phone',
-
                 'position',
+                'hire_date',
+            ]),
+            [
+                'role' => 'employee',
+                'password' => Hash::make(Str::random(40)),
+            ]
+        ));
 
-                'hire_date'
-
-            ])
-
-        );
+        $employee->reset_token = $resetToken;
+        $employee->save();
 
 
 

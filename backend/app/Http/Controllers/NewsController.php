@@ -41,7 +41,7 @@ class NewsController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
+        $data = $request->validate([
 
             'title'=>'required|string|max:255',
 
@@ -51,14 +51,14 @@ class NewsController extends Controller
 
             'publication_date'=>'required|date',
 
-            'created_by'=>'required|exists:users,id',
-
         ]);
+
+        $data['created_by'] = $request->user()->id;
 
 
 
         $news = $this->newsRepository->create(
-            $request->all()
+            $data
         );
 
 
@@ -131,7 +131,7 @@ class NewsController extends Controller
 
 
 
-        $request->validate([
+        $data = $request->validate([
 
             'title'=>'required|string|max:255',
 
@@ -149,7 +149,7 @@ class NewsController extends Controller
 
             $news,
 
-            $request->all()
+            $data
 
         );
 
