@@ -37,6 +37,14 @@ class EmployeeController extends Controller
         return response()->json($employees);
     }
 
+    public function getDirectors()
+    {
+        $directors = $this->userRepository->getDirectors();
+
+        return response()->json($directors);
+    }
+
+
 
 
 
