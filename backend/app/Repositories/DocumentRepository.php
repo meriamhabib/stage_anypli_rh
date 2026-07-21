@@ -4,47 +4,12 @@ namespace App\Repositories;
 
 use App\Models\Document;
 
-class DocumentRepository
+class DocumentRepository extends BaseRepository
 {
-    /**
-     * Retourner tous les documents
-     */
-    public function getAll()
-    {
-        return Document::with('creator')->get();
-    }
+    protected array $relations = ['creator'];
 
-    /**
-     * Retourner un document par son id
-     */
-    public function getById($id)
+    public function __construct(Document $document)
     {
-        return Document::with('creator')->find($id);
-    }
-
-    /**
-     * Créer un document
-     */
-    public function create(array $data)
-    {
-        return Document::create($data);
-    }
-
-    /**
-     * Modifier un document
-     */
-    public function update(Document $document, array $data)
-    {
-        $document->update($data);
-
-        return $document;
-    }
-
-    /**
-     * Supprimer un document
-     */
-    public function delete(Document $document)
-    {
-        return $document->delete();
+        $this->model = $document;
     }
 }

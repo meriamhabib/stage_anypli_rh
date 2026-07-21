@@ -4,88 +4,44 @@ namespace App\Repositories;
 
 use App\Models\Task;
 
-class TaskRepository
+class TaskRepository extends BaseRepository
 {
-
-    protected $model;
-
+    protected array $relations = ['user'];
 
     public function __construct(Task $task)
     {
         $this->model = $task;
     }
 
-
-
-    // récupérer toutes les tâches
-    public function getAll()
-    {
-        return $this->model
-                    ->with('user')
-                    ->get();
-    }
-
-
-
-    // récupérer une tâche par id
-    public function getById($id)
-    {
-        return $this->model
-                    ->with('user')
-                    ->find($id);
-    }
-
-
-
-
-    // créer une tâche
-    public function create(array $data)
-    {
-        return $this->model->create($data);
-    }
-
-
-
-
-    // modifier une tâche
+    /**
+     * Update a task by id, returning null when it does not exist.
+     */
     public function update($id, array $data)
     {
-
         $task = $this->model->find($id);
 
-
-        if(!$task)
-        {
+        if (!$task) {
             return null;
         }
 
-
         $task->update($data);
-
 
         return $task;
     }
 
-
-
-
-    // supprimer une tâche
+    /**
+     * Delete a task by id, returning false when it does not exist.
+     */
     public function delete($id)
     {
-
         $task = $this->model->find($id);
 
-
-        if(!$task)
-        {
+        if (!$task) {
             return false;
         }
 
-
         $task->delete();
-
 
         return true;
     }
-
 }

@@ -4,39 +4,12 @@ namespace App\Repositories;
 
 use App\Models\DocumentDownload;
 
-class DocumentDownloadRepository
+class DocumentDownloadRepository extends BaseRepository
 {
+    protected array $relations = ['user', 'document'];
 
-    public function getAll()
+    public function __construct(DocumentDownload $documentDownload)
     {
-        return DocumentDownload::with([
-            'user',
-            'document'
-        ])->get();
+        $this->model = $documentDownload;
     }
-
-
-
-    public function getById($id)
-    {
-        return DocumentDownload::with([
-            'user',
-            'document'
-        ])->find($id);
-    }
-
-
-
-    public function create(array $data)
-    {
-        return DocumentDownload::create($data);
-    }
-
-
-
-    public function delete(DocumentDownload $download)
-    {
-        return $download->delete();
-    }
-
 }

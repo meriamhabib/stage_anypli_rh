@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Concerns\ApiResponse;
 use App\Repositories\DocumentRepository;
 
 class DocumentController extends Controller
 {
+    use ApiResponse;
+
     protected $documentRepository;
 
     /**
@@ -22,9 +25,7 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        $documents = $this->documentRepository->getAll();
-
-        return response()->json($documents);
+        return response()->json($this->documentRepository->getAll());
     }
 
     /**
@@ -48,10 +49,7 @@ class DocumentController extends Controller
             'created_by' => $request->created_by,
         ]);
 
-        return response()->json([
-            'message' => 'Document created successfully.',
-            'document' => $document
-        ], 201);
+        return $this->createdResponse($document, 'Document created successfully.', 'document');
     }
 
     /**
@@ -62,9 +60,7 @@ class DocumentController extends Controller
         $document = $this->documentRepository->getById($id);
 
         if (!$document) {
-            return response()->json([
-                'message' => 'Document not found.'
-            ], 404);
+            return $this->notFoundResponse('Document not found.');
         }
 
         return response()->json($document);
@@ -78,9 +74,7 @@ class DocumentController extends Controller
         $document = $this->documentRepository->getById($id);
 
         if (!$document) {
-            return response()->json([
-                'message' => 'Document not found.'
-            ], 404);
+            return $this->notFoundResponse('Document not found.');
         }
 
         $request->validate([
@@ -97,10 +91,7 @@ class DocumentController extends Controller
             'document_type' => $request->document_type,
         ]);
 
-        return response()->json([
-            'message' => 'Document updated successfully.',
-            'document' => $document
-        ]);
+        return $this->successResponse($document, 'Document updated successfully.', 200, 'document');
     }
 
     /**
@@ -111,15 +102,11 @@ class DocumentController extends Controller
         $document = $this->documentRepository->getById($id);
 
         if (!$document) {
-            return response()->json([
-                'message' => 'Document not found.'
-            ], 404);
+            return $this->notFoundResponse('Document not found.');
         }
 
         $this->documentRepository->delete($document);
 
-        return response()->json([
-            'message' => 'Document deleted successfully.'
-        ]);
+        return $this->messageResponse('Document deleted successfully.');
     }
 }

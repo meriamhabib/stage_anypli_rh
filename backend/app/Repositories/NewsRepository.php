@@ -4,57 +4,12 @@ namespace App\Repositories;
 
 use App\Models\News;
 
-class NewsRepository
+class NewsRepository extends BaseRepository
 {
+    protected array $relations = ['creator'];
 
-    /**
-     * Récupérer toutes les actualités
-     */
-    public function getAll()
+    public function __construct(News $news)
     {
-        return News::with('creator')->get();
+        $this->model = $news;
     }
-
-
-
-    /**
-     * Récupérer une actualité par ID
-     */
-    public function getById($id)
-    {
-        return News::with('creator')->find($id);
-    }
-
-
-
-    /**
-     * Créer une actualité
-     */
-    public function create(array $data)
-    {
-        return News::create($data);
-    }
-
-
-
-    /**
-     * Modifier une actualité
-     */
-    public function update(News $news, array $data)
-    {
-        $news->update($data);
-
-        return $news;
-    }
-
-
-
-    /**
-     * Supprimer une actualité
-     */
-    public function delete(News $news)
-    {
-        return $news->delete();
-    }
-
 }

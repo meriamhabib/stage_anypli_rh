@@ -6,24 +6,19 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class UserRepository
+class UserRepository extends BaseRepository
 {
-
-    /**
-     * Créer un utilisateur
-     */
-    public function create(array $data)
+    public function __construct(User $user)
     {
-        return User::create($data);
+        $this->model = $user;
     }
-
 
     /**
      * Trouver un utilisateur par email
      */
     public function findByEmail($email)
     {
-        return User::where('email',$email)->first();
+        return $this->model->where('email', $email)->first();
     }
 
 
@@ -32,36 +27,7 @@ class UserRepository
      */
     public function findById($id)
     {
-        return User::find($id);
-    }
-
-
-    /**
-     * Retourner tous les utilisateurs
-     */
-    public function getAll()
-    {
-        return User::all();
-    }
-
-
-    /**
-     * Modifier utilisateur
-     */
-    public function update(User $user,array $data)
-    {
-        $user->update($data);
-
-        return $user;
-    }
-
-
-    /**
-     * Supprimer utilisateur
-     */
-    public function delete(User $user)
-    {
-        return $user->delete();
+        return $this->model->find($id);
     }
 
 
@@ -70,7 +36,7 @@ class UserRepository
      */
     public function getEmployees()
     {
-        return User::where('role', 'employee')->get();
+        return $this->model->where('role', 'employee')->get();
     }
 
 
@@ -80,7 +46,7 @@ class UserRepository
      */
     public function findEmployee($id)
     {
-        return User::where('role', 'employee')
+        return $this->model->where('role', 'employee')
                     ->findOrFail($id);
     }
 
@@ -96,7 +62,7 @@ class UserRepository
         $temporaryPassword = Str::random(10);
 
 
-        $employee = User::create([
+        $employee = $this->model->create([
 
             'last_name' => $data['last_name'],
 
@@ -123,6 +89,4 @@ class UserRepository
 
         return $employee;
     }
-
-
 }
