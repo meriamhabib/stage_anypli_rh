@@ -66,7 +66,7 @@ class EmployeeController extends Controller
 
 
         // Création de l'employé
-        $employee = $this->userRepository->create([
+        $employee = $this->userRepository->create(array_merge(
 
             $request->only([
 
@@ -74,19 +74,23 @@ class EmployeeController extends Controller
 
                 'first_name',
 
-            'password' => Hash::make(Str::random(40)),
-            
-            'reset_token' => $resetToken,
-
                 'phone',
 
                 'position',
 
                 'hire_date'
 
-            ])
+            ]),
 
-        );
+            [
+
+                'password' => Hash::make(Str::random(40)),
+
+                'reset_token' => $resetToken,
+
+            ]
+
+        ));
 
 
 
