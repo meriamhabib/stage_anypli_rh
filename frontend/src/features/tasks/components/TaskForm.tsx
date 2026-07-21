@@ -53,6 +53,9 @@ const [status,setStatus] = useState<Task["status"]>(
 
 
 
+const [error,setError] = useState<string | null>(null);
+
+
 
 
 const handleSubmit = async(
@@ -61,6 +64,8 @@ const handleSubmit = async(
 
 
 e.preventDefault();
+
+setError(null);
 
 
 
@@ -127,9 +132,15 @@ onClose();
 catch(error:any){
 
 
-console.log(
+console.error(
     "Erreur création tâche :",
     error.response?.data || error.message
+);
+
+
+setError(
+    error.response?.data?.message ||
+    "Impossible d'enregistrer la tâche. Veuillez réessayer."
 );
 
 
@@ -183,6 +194,19 @@ task
 "Nouvelle tâche"
 }
 </h2>
+
+
+
+
+{
+error && (
+
+<p style={{ color: "red", marginBottom: "10px" }}>
+{error}
+</p>
+
+)
+}
 
 
 

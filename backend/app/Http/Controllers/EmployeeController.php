@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Mail\EmployeeAccountCreated;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class EmployeeController extends Controller
 {
@@ -63,42 +66,62 @@ class EmployeeController extends Controller
 
         $resetToken = Str::random(64);
 
+        try {
 
+            // Création de l'employé + envoi de l'email dans une transaction :
+            // si l'email échoue, on ne laisse pas de compte orphelin sans lien
+            // d'activation.
+            $employee = DB::transaction(function () use ($request, $resetToken) {
 
-        // Création de l'employé
-        $employee = $this->userRepository->create([
+                $employee = $this->userRepository->create(array_merge(
 
-            $request->only([
+                    $request->only([
 
-                'last_name',
+                        'last_name',
 
-                'first_name',
+                        'first_name',
 
-            'password' => Hash::make(Str::random(40)),
-            
-            'reset_token' => $resetToken,
+                        'email',
 
-                'phone',
+                        'phone',
 
-                'position',
+                        'position',
 
-                'hire_date'
+                        'hire_date',
 
-            ])
+                    ]),
 
-        );
+                    [
+                        'password' => Hash::make(Str::random(40)),
 
+                        'reset_token' => $resetToken,
+                    ]
 
+                ));
 
-        $link = env('FRONTEND_URL') . '/reset-password/' . $resetToken;
+                $link = env('FRONTEND_URL') . '/reset-password/' . $resetToken;
 
-        Mail::to($employee->email)
-        ->send(new EmployeeAccountCreated(
-        $employee,
-        $link
-         ));
+                Mail::to($employee->email)
+                ->send(new EmployeeAccountCreated(
+                $employee,
+                $link
+                 ));
 
+                return $employee;
+            });
 
+        } catch (Throwable $e) {
+
+            Log::error('Failed to create employee account', [
+                'email' => $request->input('email'),
+                'exception' => $e,
+            ]);
+
+            return response()->json([
+                'message' => 'Unable to create the employee account. Please try again later.',
+            ], 500);
+
+        }
 
         return response()->json([
 

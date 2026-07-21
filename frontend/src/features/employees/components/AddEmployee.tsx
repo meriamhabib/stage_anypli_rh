@@ -56,10 +56,13 @@ function AddEmployee(){
         }catch(error:any){
 
 
-            console.log(error.response?.data);
+            console.error(error.response?.data ?? error);
 
 
-            alert("Erreur lors de l'ajout");
+            alert(
+                error.response?.data?.message ||
+                "Erreur lors de l'ajout"
+            );
 
 
         }

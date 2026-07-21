@@ -57,9 +57,12 @@ function Login() {
         } catch (error: any) {
 
 
-            console.log(error.response?.data);
+            console.error(error.response?.data ?? error);
 
-            alert('Erreur de connexion');
+            alert(
+                error.response?.data?.message ||
+                'Erreur de connexion'
+            );
 
         }
 
