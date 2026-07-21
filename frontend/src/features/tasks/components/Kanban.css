@@ -1,0 +1,219 @@
+.kanban-page {
+  background-color: transparent;
+  min-height: auto;
+  font-family: var(--sans);
+  text-align: left;
+}
+
+.kanban-header {
+  margin-bottom: 24px;
+}
+
+.kanban-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0 0 8px 0;
+}
+
+.kanban-subtitle {
+  font-size: 14px;
+  color: var(--text);
+  margin: 0;
+}
+
+.kanban-board {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  align-items: flex-start;
+}
+
+.kanban-column {
+  flex: 0 0 350px;
+  background-color: var(--code-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-column.is-dragging-over {
+  background-color: var(--accent-bg);
+}
+
+.kanban-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.kanban-column-title {
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-h);
+}
+
+.kanban-column-count {
+  font-size: 12px;
+  background-color: var(--accent-bg);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.kanban-column-add {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Specific column colors */
+.column-todo { border-top: 3px solid #6b7280; }
+.column-progress { border-top: 3px solid #f59e0b; }
+.column-done { border-top: 3px solid #10b981; }
+
+.kanban-card {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: grab;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+  text-align: left;
+}
+
+.kanban-card:hover {
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.kanban-card:active {
+  cursor: grabbing;
+}
+
+.kanban-card.is-dragging {
+  box-shadow: var(--shadow);
+  transform: rotate(2deg);
+  border-color: var(--accent-border);
+}
+
+.kanban-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+  margin: 0 0 4px 0;
+}
+
+.kanban-card-desc {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.kanban-priority {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.priority-high {
+  background-color: rgba(220, 38, 38, 0.15); /* New Red */
+  color: #dc2626;
+}
+
+.priority-medium {
+  background-color: rgba(239, 68, 68, 0.15); /* Light Red */
+  color: #ef4444;
+}
+
+.priority-low {
+  background-color: var(--social-bg);
+  color: var(--text);
+}
+
+.kanban-page button[style],
+.kanban-page .btn-primary {
+  background: transparent linear-gradient(112deg, #dc2626, #b91c1c) 0 0 no-repeat padding-box !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 50px !important;
+  font-weight: 700 !important;
+  font-family: 'Nunito', sans-serif !important;
+  transition: all 0.25s ease !important;
+}
+
+.kanban-page button[style]:hover,
+.kanban-page .btn-primary:hover {
+  background: transparent linear-gradient(112deg, #e8666c, #d42c33) 0 0 no-repeat padding-box !important;
+  box-shadow: 0 4px 12px rgba(195, 38, 45, 0.30) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Trash / Corbeille dropzone */
+.kanban-trash-container {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.kanban-trash-zone {
+  border: 2px dashed #fca5a5;
+  border-radius: 14px;
+  padding: 20px;
+  background-color: #fff5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #dc2626;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 80px;
+}
+
+.kanban-trash-zone.is-drag-over {
+  background-color: #fee2e2;
+  border-color: #ef4444;
+  transform: scale(1.01);
+  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.15);
+}
+
+.kanban-trash-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fecaca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b91c1c;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.kanban-trash-zone.is-drag-over .kanban-trash-icon {
+  transform: scale(1.15) rotate(-10deg);
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.kanban-trash-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #991b1b;
+}
+
