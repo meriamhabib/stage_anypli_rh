@@ -32,17 +32,23 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-    // Employees
-    Route::get('/employees', [EmployeeController::class,'index']);
-    Route::get('/directors', [EmployeeController::class,'getDirectors']);
+    // Employees / directors (director only)
+    Route::middleware('role:director')->group(function () {
+        Route::get('/employees', [EmployeeController::class,'index']);
+        Route::get('/directors', [EmployeeController::class,'getDirectors']);
+        Route::post('/employees', [EmployeeController::class,'store']);
+    });
 
-    Route::post('/employees', [EmployeeController::class,'store']);
 
 
+    // Documents: everyone authenticated can read, only directors can manage
+    Route::apiResource('documents', DocumentController::class)
+        ->only(['index', 'show']);
 
-
-    // Documents
-    Route::apiResource('documents', DocumentController::class);
+    Route::middleware('role:director')->group(function () {
+        Route::apiResource('documents', DocumentController::class)
+            ->only(['store', 'update', 'destroy']);
+    });
 
     // Télécharger un document (stream + enregistrement du téléchargement)
     Route::get('documents/{document}/download', [DocumentController::class, 'download']);
@@ -54,19 +60,25 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-    // Leave requests
-    Route::apiResource(
-        'leave-requests',
-        LeaveRequestController::class
-    );
+    // Leave requests: employees submit/view, directors oversee and process
+    Route::apiResource('leave-requests', LeaveRequestController::class)
+        ->only(['store', 'show']);
+
+    Route::middleware('role:director')->group(function () {
+        Route::apiResource('leave-requests', LeaveRequestController::class)
+            ->only(['index', 'update', 'destroy']);
+    });
 
 
 
-    // News
-    Route::apiResource(
-        'news',
-        NewsController::class
-    );
+    // News: everyone authenticated can read, only directors can manage
+    Route::apiResource('news', NewsController::class)
+        ->only(['index', 'show']);
+
+    Route::middleware('role:director')->group(function () {
+        Route::apiResource('news', NewsController::class)
+            ->only(['store', 'update', 'destroy']);
+    });
 
 
 
@@ -75,11 +87,19 @@ Route::middleware('auth:sanctum')->group(function () {
         'document-downloads',
         DocumentDownloadController::class
     )->only([
-        'index',
         'store',
         'show',
-        'destroy'
     ]);
+
+    Route::middleware('role:director')->group(function () {
+        Route::apiResource(
+            'document-downloads',
+            DocumentDownloadController::class
+        )->only([
+            'index',
+            'destroy',
+        ]);
+    });
 
 
 

@@ -31,21 +31,18 @@ class LeaveRequestController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'sometimes|exists:users,id',
+        $data = $request->validate([
             'leave_type' => 'required|in:annual,sick,personal',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string',
             'medical_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'processed_by' => 'nullable|exists:users,id',
         ]);
 
-        $data = $request->all();
-
-        if (empty($data['user_id']) && $request->user()) {
-            $data['user_id'] = $request->user()->id;
-        }
+        // The owner and processing state are set server-side so an employee
+        // cannot submit a request for someone else or self-approve it.
+        $data['user_id'] = $request->user()->id;
+        $data['status'] = 'pending';
 
         // Upload du certificat médical
         if ($request->hasFile('medical_certificate')) {
@@ -86,11 +83,14 @@ class LeaveRequestController extends Controller
             ], 404);
         }
 
-        $data = $request->all();
+        // Only validated processing fields are accepted; the processor is
+        // recorded server-side so it cannot be spoofed.
+        $data = $request->validate([
+            'status' => 'sometimes|in:pending,approved,rejected',
+            'comment' => 'nullable|string',
+        ]);
 
-        if ($request->user() && in_array($request->user()->role, ['director', 'directeur'])) {
-            $data['processed_by'] = $request->user()->id;
-        }
+        $data['processed_by'] = $request->user()->id;
 
         $leave = $this->leaveRequestRepository->update($leave, $data);
         $leave->load(['user', 'processedBy']);
